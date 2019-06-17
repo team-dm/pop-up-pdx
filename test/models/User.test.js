@@ -19,13 +19,16 @@ describe('User models', () => {
     return User.create({
       email: 'chef@gmail.com',
       password: 'abc123',
-      role: 'chef'
+      role: 'chef',
+      bio:'born in 1988 chef paula has been cooking for 30 years...'
+
     })
       .then(user => {
         expect(user.toJSON()).toEqual({
+          _id: expect.any(Types.ObjectId),
           email: 'chef@gmail.com',
           role: 'chef',
-          _id: expect.any(Types.ObjectId)
+          bio:'born in 1988 chef paula has been cooking for 30 years...'
         });
       });
   });
@@ -34,7 +37,8 @@ describe('User models', () => {
     return User.create({
       email: 'chef@gmail.com',
       password: 'password123',
-      role: 'chef'
+      role: 'chef',
+      bio:'born in 1988 chef paula has been cooking for 30 years...'
     })
       .then(user => {
         expect(user.passwordHash).toEqual(expect.any(String));
@@ -52,6 +56,12 @@ describe('User models', () => {
     const user = new User({});
     const errors = user.validateSync().errors;
     expect(errors.role.message).toEqual('Role required');
+  });
+
+  it('has a bio', () => {
+    const user = new User({});
+    const errors = user.validateSync().errors;
+    expect(errors.role.message).toEqual('Bio is a requireed field');
   });
 
   it('can compare good passwords', () => {
