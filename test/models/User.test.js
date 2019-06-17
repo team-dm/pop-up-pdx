@@ -19,16 +19,18 @@ describe('User models', () => {
     return User.create({
       email: 'chef@gmail.com',
       password: 'abc123',
+      name:'Paula Stewart',
       role: 'chef',
       bio:'born in 1988 chef paula has been cooking for 30 years...'
 
     })
       .then(user => {
         expect(user.toJSON()).toEqual({
-          _id: expect.any(Types.ObjectId),
           email: 'chef@gmail.com',
+          name:'Paula Stewart',
           role: 'chef',
-          bio:'born in 1988 chef paula has been cooking for 30 years...'
+          bio:'born in 1988 chef paula has been cooking for 30 years...',
+          _id: expect.any(Types.ObjectId)
         });
       });
   });
@@ -36,9 +38,10 @@ describe('User models', () => {
   it('can save password hash', () => {
     return User.create({
       email: 'chef@gmail.com',
+      name:'Paula Stewart',
       password: 'password123',
+      bio:'born in 1988 chef paula has been cooking for 30 years...',
       role: 'chef',
-      bio:'born in 1988 chef paula has been cooking for 30 years...'
     })
       .then(user => {
         expect(user.passwordHash).toEqual(expect.any(String));
@@ -51,6 +54,11 @@ describe('User models', () => {
     const errors = user.validateSync().errors;
     expect(errors.email.message).toEqual('Email required');
   });
+  it('has a required name', () => {
+    const user = new User({});
+    const errors = user.validateSync().errors;
+    expect(errors.name.message).toEqual('Name required');
+  });
 
   it('has a required role', () => {
     const user = new User({});
@@ -58,17 +66,19 @@ describe('User models', () => {
     expect(errors.role.message).toEqual('Role required');
   });
 
-  it('has a bio', () => {
+  it('has a required bio', () => {
     const user = new User({});
     const errors = user.validateSync().errors;
-    expect(errors.role.message).toEqual('Bio is a requireed field');
+    expect(errors.bio.message).toEqual('Bio required');
   });
 
   it('can compare good passwords', () => {
     return User.create({
       email: 'chef@gmail.com',
       password: 'abc123',
-      role: 'chef'
+      role: 'chef',
+      name:'Paula Stewart',
+      bio:'born in 1988 chef paula has been cooking for 30 years...'
     })
       .then(user => {
         return user.compare('abc123');
@@ -82,7 +92,9 @@ describe('User models', () => {
     return User.create({
       email: 'chef@gmail.com',
       password: 'abc123',
-      role: 'chef'
+      role: 'chef',
+      name:'Paula Stewart',
+      bio:'born in 1988 chef paula has been cooking for 30 years...'
     })
       .then(user => {
         return user.compare('badPassword');
