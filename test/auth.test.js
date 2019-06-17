@@ -24,7 +24,9 @@ describe('Auth', () => {
       .send({ 
         email: 'vistitor@email.com',
         password: 'password',
-        role: 'visitor'
+        role: 'visitor',
+        name:'Paula Stewart',
+        bio:'born in 1988 chef paula has been cooking for 30 years...'
 
       })
       .then(res => {
@@ -32,7 +34,9 @@ describe('Auth', () => {
           user: {
             email: 'vistitor@email.com',
             role: 'visitor',
-            _id: expect.any(String)
+            _id: expect.any(String),
+            name:'Paula Stewart',
+            bio:'born in 1988 chef paula has been cooking for 30 years...'
           },
           token: expect.any(String)
         });
@@ -40,21 +44,26 @@ describe('Auth', () => {
   });
 
   it('signin a user', () => {
-    return User.create({ email: 'ron@yahoo.com', password: 'password12', role: 'visitor' })
+    return User.create({ email: 'ron@yahoo.com', password: 'password12', role: 'visitor', name:'Paula Stewart',
+      bio:'born in 1988 chef paula has been cooking for 30 years...' })
       .then(() => {
         return request(app)
           .post('/auth/signin')
           .send({
             email: 'ron@yahoo.com',
             password: 'password12',
-            role: 'visitor'
+            role: 'visitor',
+            name:'Paula Stewart',
+            bio:'born in 1988 chef paula has been cooking for 30 years...'
           })
           .then(res => {
             expect(res.body).toEqual({
               user: {
                 _id: expect.any(String),
                 email: 'ron@yahoo.com',
-                role: 'visitor'
+                role: 'visitor',
+                name:'Paula Stewart',
+                bio:'born in 1988 chef paula has been cooking for 30 years...'
               },
               token: expect.any(String)
             });      
@@ -66,12 +75,15 @@ describe('Auth', () => {
     return User.create({
       email: 'test@test.com',
       password: 'password',
-      role: 'visitor'
+      role: 'visitor',
+      name:'Paula Stewart',
+      bio:'born in 1988 chef paula has been cooking for 30 years...'
     })
       .then(() => {
         return request(app)
           .post('/auth/signin')
-          .send({ email: 'test@test.com', password: 'password', role: 'visitor' })
+          .send({ email: 'test@test.com', password: 'password', role: 'visitor', name:'Paula Stewart',
+            bio:'born in 1988 chef paula has been cooking for 30 years...' })
           .then(res => res.body.token);      
       })
       .then(token => {
@@ -83,7 +95,9 @@ describe('Auth', () => {
         expect(res.body).toEqual({          
           _id: expect.any(String),
           email: 'test@test.com',
-          role: 'visitor'
+          role: 'visitor',
+          name:'Paula Stewart',
+          bio:'born in 1988 chef paula has been cooking for 30 years...'
         });
       });
   });
